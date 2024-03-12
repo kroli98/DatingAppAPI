@@ -32,28 +32,24 @@ namespace DatingAppAPI.Controllers
             return thing;
         }
 
-        [HttpGet("server-error")]
-        public ActionResult<string> GetServerError()
-        {
+[HttpGet("server-error")]
+public ActionResult<string> GetServerError()
+{
+    try
+    {
+        var thing = _context.Users.Find(-1);
 
-            var thing = _context.Users.Find(-1);
+        var thingToReturn = thing.ToString();
 
-            if (thing == null)
-            {
-                return NotFound();
-            }
+        return thingToReturn;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
 
-            var thingToReturn = thing?.ToString();
-
-            if (thingToReturn == null)
-            {
-                return NotFound();
-            }
-
-            return thingToReturn;
-
-
-        }
+        return StatusCode(500, "Internal server error occurred");
+    }
+}
 
         [HttpGet("bad-request")]
         public ActionResult<string> GetBadRequest()
